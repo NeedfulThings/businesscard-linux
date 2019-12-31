@@ -7,6 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Cache downloads
+      uses: actions/cache@v1
+      with:
+        path: dl/
+        key: dl
     - name: Update submodules
       run: git submodule update --init
     - name: Compile
@@ -14,3 +19,7 @@ jobs:
         cd buildroot
         make BR2_EXTERNAL=$PWD/.. thirtythreeforty_businesscard_defconfig
         make
+    - uses: actions/upload-artifact@v1
+      with:
+        name: flash.bin
+        path: output/images/flash.bin
